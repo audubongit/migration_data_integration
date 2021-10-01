@@ -1,6 +1,6 @@
 # LCP code
 # Tim Meehan
-# 28 Sep 2021
+# 1 Oct 2021
 
 
 # setup ------------------------------------------------------------------------
@@ -120,6 +120,7 @@ rescale_ras_01 <- function(x, new.min = 0, new.max = 1) {
   y <- new.min + (x - x.min) * ((new.max - new.min) / (x.max - x.min))
   return(y)
 }
+
 # baseline function
 add_baselines <- function(x, lmask=land_mask, 
                              base_land=0.01,
@@ -369,6 +370,7 @@ for(s in 1:length(1)){
   } else mcmat <- expand.grid(proportion=1/length(unique(nonbreeding_mcr_list)),
               mcr_class_breeding=breeding_mcr_list, 
               mcr_class_nonbreeding=nonbreeding_mcr_list)
+  # check it out: head(mcmat)
 
   # match winter and summer points per breeding mcr based on connectivity matrix
   all_sum_points <- c()
@@ -449,7 +451,7 @@ for(s in 1:length(1)){
   }
   stopCluster(cl)
   
-  # make stack from parallel list output list and add names
+  # make stack from parallel output list and add names
   prob_stack <- stack(prob_stack)
   # check out individual paths: plot(prob_stack[[c(1:3, 7:9)]])
 
@@ -603,7 +605,7 @@ for(s in 1:length(1)){
   # check out extent: plot(envelope$geometry)
   print("got extent maps")
   
-  # trim lcp maps
+  # trim lcp maps to integration/validation area
   lcp_map <- lcp_stack[[1:2]]
   lcp_map <- raster::crop(lcp_map, envelope) %>% 
     raster::mask(envelope)
@@ -612,7 +614,7 @@ for(s in 1:length(1)){
   # check out trimmed lcp maps: plot(lcp_map)
   print("got trimmed lcp maps")
   
-  # get and trim eBird S&T maps
+  # get and trim eBird S&T maps to integration/validation area
   stem_map <- occs_stack[[1:2]]
   stem_map <- raster::resample(stem_map, lcp_map)
   stem_map[is.na(stem_map)] <- 0
@@ -763,7 +765,7 @@ for(s in 1:length(1)){
   # combine all
   all_movement_df <- rbind(out_list$spring_df, out_list$fall_df)
   out_list$all_movement_df <- all_movement_df
-  View(all_movement_df)
+  # check it out: View(all_movement_df)
   
   # save integration and validation data for the species
   save(out_list, file=paste0(out_path, "/", species_name, "/", species_name,
@@ -978,9 +980,9 @@ for(s in 1:length(1)){
   }
   names(pred_stack) <- c("r1_pred", "r3_pred", "r4_pred")
   writeRaster(pred_stack$r3_pred, paste0(out_path, "/", species_name, "/", species_name,
-                    "_", focal_season, "_", "integrated_surface.tif"), overwrite=T)
+                    "_", focal_season, "_", "gam_integrated_surface.tif"), overwrite=T)
   writeRaster(pred_stack$r4_pred, paste0(out_path, "/", species_name, "/", species_name,
-                    "_", focal_season, "_", "max_surface.tif"), overwrite=T)
+                    "_", focal_season, "_", "max_integrated_surface.tif"), overwrite=T)
   # check it out: plot(pred_stack)
   
   # make df for ggplots
@@ -1040,7 +1042,7 @@ for(s in 1:length(1)){
     theme_map()
   p_pts <- ggplot() +
     geom_sf(data=hemisphere_map_sf, fill="gray60") +
-    geom_sf(data=filter(dat1, presence==1) %>%
+    geom_sf(data=filter(dat1_train, presence==1) %>%
               dplyr::mutate(tech_type=str_replace(tech_type, "bnd", "Band")) %>%
               dplyr::mutate(tech_type=str_replace(tech_type, "ptt", "PTT")) %>%
               dplyr::mutate(tech_type=str_replace(tech_type, "gps", "GPS")) %>%
@@ -1176,9 +1178,9 @@ for(s in 1:length(1)){
   }
   names(pred_stack) <- c("r1_pred", "r3_pred", "r4_pred")
   writeRaster(pred_stack$r3_pred, paste0(out_path, "/", species_name, "/", species_name,
-                    "_", focal_season, "_", "integrated_surface.tif"), overwrite=T)
+                    "_", focal_season, "_", "gam_integrated_surface.tif"), overwrite=T)
   writeRaster(pred_stack$r4_pred, paste0(out_path, "/", species_name, "/", species_name,
-                    "_", focal_season, "_", "max_surface.tif"), overwrite=T)
+                    "_", focal_season, "_", "max_integrated_surface.tif"), overwrite=T)
   # check it out: plot(pred_stack)
   
   # make df for plots
@@ -1238,7 +1240,7 @@ for(s in 1:length(1)){
     theme_map()
   p_pts <- ggplot() +
     geom_sf(data=hemisphere_map_sf, fill="gray60") +
-    geom_sf(data=filter(dat1, presence==1) %>%
+    geom_sf(data=filter(dat1_train, presence==1) %>%
               dplyr::mutate(tech_type=str_replace(tech_type, "bnd", "Band")) %>%
               dplyr::mutate(tech_type=str_replace(tech_type, "ptt", "PTT")) %>%
               dplyr::mutate(tech_type=str_replace(tech_type, "gps", "GPS")) %>%
