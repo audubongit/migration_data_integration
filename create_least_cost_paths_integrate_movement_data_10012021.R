@@ -29,11 +29,11 @@ select <- dplyr::select
 options(scipen=9999999)
 
 # directories
-setwd("Z:/Migratory_Bird_Initiative/LeastCostPaths/for_publication")
-out_path <- "Z:/Migratory_Bird_Initiative/LeastCostPaths/for_publication/"
-movedat_path <- "Z:/Migratory_Bird_Initiative/LeastCostPaths/for_publication/inputs/"
-mcr_path <- "Z:/Migratory_Bird_Initiative/LeastCostPaths/for_publication/inputs/"
-mcmat_path <- "Z:/Migratory_Bird_Initiative/LeastCostPaths/for_publication/inputs/"
+setwd(getwd())
+out_path <- "./outputs/"
+movedat_path <- "./inputs/"
+mcr_path <- "./inputs/"
+mcmat_path <- "./inputs/"
 
 # crs
 mbi_analysis <- "+proj=aeqd +lat_0=15 +lon_0=-90 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
