@@ -1,0 +1,4 @@
+"Model","D_explained","AIC","Delta_AIC","AUC"
+"GAM_STEM_LCP",0.48,3946.64,0,0.94
+"GAM_Max",0.47,4031.32,84.68,0.94
+"GAM_Null",0,7584.65,3553.33,

@@ -1,1 +1,0 @@
-This is where output from the script goes.

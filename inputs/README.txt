@@ -1,1 +1,0 @@
-The script pulls files from this folder.

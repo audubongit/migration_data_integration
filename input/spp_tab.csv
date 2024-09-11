@@ -1,0 +1,2 @@
+species_code,species,has_connectivity,overwater_pre,overwater_post,overland_pre,overland_post,theta_pre,theta_post,ebird_eval
+amered,American Redstart,1,0.02,0.02,0.02,0.02,0.01,0.01,1
