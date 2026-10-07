@@ -19,7 +19,6 @@ library(stats)
 library(foreach)
 
 # load ebird key and then restart
-# set_ebirdst_access_key("XXXXXX", overwrite=T)
 
 # settings
 extract <- raster::extract 
